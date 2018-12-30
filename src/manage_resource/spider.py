@@ -1,9 +1,11 @@
 #! python3
 # -*- coding:utf-8 -*- 
 
+import csv
 import time
 import random
 import requests
+from requests.utils import quote
 from bs4 import BeautifulSoup as bs
 
 
@@ -90,7 +92,7 @@ class BaiduGetter(Getter):
         for page_list in self._get_content():
             for data_list in page_list:
                 if data_list.get('thumbURL'):
-                    url_sets.append(data_list.get('thumbURL'))
+                    url_sets.append([data_list.get('thumbURL'), self._platform])
 
         return url_sets
 
@@ -106,20 +108,37 @@ class GoogleGetter(Getter):
         :return: url_sets
         """
         url_sets = []
-        # url = "https://www.google.com.hk/search?q=%E5%B0%8F%E9%BA%A6%E7%99%BD%E7%B2%89%E7%97%85&safe=strict&tbm=isch" \ 白粉病
-        #       "&tbs=rimg:CbgRiPmW6yktIjgA7KoRTB2sYIXxF2uiIDkIkxJc7haFyQmWO4D9sW2uIcePNqstan5WZrYMhH-XUwPn8skDFRtHZSo" \
-        #       "SCQDsqhFMHaxgEe6A8yyGhyUTKhIJhfEXa6IgOQgRGSRbhTcS18kqEgmTElzuFoXJCRH2kOc3O8V3WCoSCZY7gP2xba4hESJz6cy9" \
-        #       "sC55KhIJx482qy1qflYRpxRtQ4Tj1nQqEglmtgyEf5dTAxF5xWMvFeid2ioSCefyyQMVG0dlEYWt-NVRuw3I&tbo=u&sa=X&ved=2" \
-        #       "ahUKEwjVuZX-wb_fAhUEQY8KHWWiAE8Q9C96BAgBEBs&biw=1536&bih=728&dpr=1.25#imgrc=AOyqEUwdrGBLgM: "
-        # url = "https://www.google.com.hk/search?q=%E5%B0%8F%E9%BA%A6%E9%94%88%E7%97%85&newwindow=1&safe=strict&source=" \ 锈病
-        #       "lnms&tbm=isch&sa=X&ved=0ahUKEwicl5GnrcDfAhXLvI8KHSiQD8QQ_AUIDigB&biw=1126&bih=654"
-        url = "https://www.google.com.hk/search?newwindow=1&safe=strict&biw=1126&bih=654&tbm=isch&sa=1&ei=ifMkXJi2LojW" \
-              "vgSVwKfIBQ&q=%E5%B0%8F%E9%BA%A6%E5%8F%B6%E6%9E%AF%E7%97%85&oq=%E5%B0%8F%E9%BA%A6%E5%8F%B6%E6%9E%AF%E7%9" \
-              "7%85&gs_l=img.3...129102.130830..131224...0.0..0.273.1484.2-6......1....1..gws-wiz-img.......0j0i12i24.Tzh9Y047m1k"
+        url = "https://www.google.com.hk/search?q={}&newwindow=1&safe=strict&source=lnms&tbm=isch&sa=X&" \
+              "ved=0ahUKEwiPwtrxnsXfAhUB87wKHXYSBXQQ_AUIDigB&biw=1238&bih=618".format(quote(self._keyword))
         response = requests.get(url=url, headers=self._headers)
         soup = bs(response.text, 'lxml')
         div_list = soup.find_all('div', class_='rg_meta')  # , attrs={"ou": re.compile("^http[.*]$.jpg")}
         for tag in div_list:
             if tag.contents:
-                url_sets.append(eval(tag.contents[0]).get('ou'))
+                url_sets.append([eval(tag.contents[0]).get('ou'), self._platform])
+
         return url_sets
+
+
+def save_url_list(disease, list_):
+    with open(disease + "_url.csv", 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerows(list_)
+
+
+def get_all_urls(disease, pages=5):
+    bd_getter = BaiduGetter(disease, pages)
+    bd_set = bd_getter.get_urls()
+    gg_getter = GoogleGetter(disease, pages)
+    gg_set = gg_getter.get_urls()
+    result = bd_set + gg_set
+
+    # 保存全部url到本地csv
+    save_url_list(disease, result)
+
+    return result
+
+
+if __name__ == '__main__':
+    # 调用这个函数是为了保存url到本地
+    get_all_urls()
