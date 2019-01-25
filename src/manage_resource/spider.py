@@ -1,5 +1,5 @@
 #! python3
-# -*- coding:utf-8 -*- 
+# -*- coding:utf-8 -*-
 
 import csv
 import time
@@ -141,4 +141,5 @@ def get_all_urls(disease, pages=5):
 
 if __name__ == '__main__':
     # 调用这个函数是为了保存url到本地
-    get_all_urls()
+    # get_all_urls()
+    pass
