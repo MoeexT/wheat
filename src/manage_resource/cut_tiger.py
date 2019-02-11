@@ -8,9 +8,9 @@ import time
 from PIL import Image, ExifTags
 
 # csv保存路径
-csv_path = r'D:\Users\Teemo Nicolas\Downloads\016\\'
+csv_path = r'D:\Users\Teemo Nicolas\Downloads\22\\'
 # 待处理图片路径
-img_path = r'D:\Users\Teemo Nicolas\Downloads\016\right\cut\\'
+img_path = r'D:\Users\Teemo Nicolas\Downloads\22\right\cut\\'
 # 水平、垂直增量
 h_x = 0
 h_y = 6
@@ -46,12 +46,12 @@ def main():
     file_list = os.listdir(img_path)
 
     # 看截出来图的方向
-    cut(img_path, file_list[int(len(file_list)/2)], start_x, start_y, crop_length, crop_height)
+    cut(img_path, file_list[len(file_list)//2], start_x, start_y, crop_length, crop_height)
     gon = '0'
     while gon not in ['', 'y', 'Y', 'yes', 'n', 'N', 'not']:
         gon = input("Enter go on...('y', 'n')\n")
         if gon in ['n', 'N', 'not']:
-            os.remove(img_path + file_list[int(len(file_list)/2)][:-4] + '_1' + file_list[int(len(file_list)/2)][-4:])
+            os.remove(img_path + file_list[len(file_list)//2][:-4] + '_1' + file_list[len(file_list)//2][-4:])
             sys.exit(0)
         else:
             break
@@ -70,13 +70,28 @@ def main():
 
 
 # 起始点坐标，PhotoShop获得
-start_x = 783
-start_y = 522
+start_x = 804
+start_y = 738
 # 切割尺寸，PhotoShop获得
-crop_length = 4689
-crop_height = 3126
+crop_length = 4238
+crop_height = 2832
 if __name__ == '__main__':
     main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

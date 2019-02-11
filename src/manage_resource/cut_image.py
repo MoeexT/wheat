@@ -4,8 +4,8 @@ import random
 import os
 from PIL import Image
 
-read_dir = r"D:\DeepLearningProjects\images\小麦病种\叶枯病\\"
-save_dir = r"D:\DeepLearningProjects\images\handled\叶枯病\\"
+read_dir = r"D:\Users\Teemo Nicolas\OneDrive - business\文档\JetBrains\PycharmProjects\wheat\data\recover\rust\\"
+save_dir = r"D:\Users\Teemo Nicolas\OneDrive - business\文档\JetBrains\PycharmProjects\wheat\data\train\rust\\"
 read_count = 0
 save_count = 0
 error_count = 0
@@ -35,12 +35,15 @@ def save_(img_list):
 
 
 def main():
-    global read_count
+    global read_count, error_count
     img_list = os.listdir(read_dir)
     for image in img_list:
-        handled_imgs = cut(read_dir + image)
-        save_(handled_imgs)
-        read_count += 1
+        try:
+            handled_imgs = cut(read_dir + image)
+            save_(handled_imgs)
+            read_count += 1
+        except:
+            error_count += 1
     print("handled: ", read_count)
     print("saved: ", save_count)
     print("error: ", error_count)

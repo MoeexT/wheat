@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from manage_resource import Pysql
+from manage_resource.util import Pysql
 
 diseases = ["blight/", "powdery/", "rust/"]
 pysql = Pysql()

@@ -72,21 +72,28 @@ class Pysql:
             print("Delete record failed: ", e.args)
             self._db.rollback()
 
-    def select(self, table, *args):
+    def select(self, table, condition, *args):
         """
+
+        %
+        "url LIKE '%/%%' ESCAPE '/'" 这个条件是为了查询含有中文编码的url
+        %
         :param table: 查询的表
+        :param condition: 查询条件
         :param args: 查询的列名
         :return: <generator: tuple> 元素是查询结果的[元组]
         """
-        sql = "SELECT " + str(args).replace('(', '').replace(')', '').replace('\'', '') + " FROM " \
-              + self._tables[table] + " WHERE url LIKE '%/%%' ESCAPE '/';"
+        args_list = [arg for arg in args]
+        sql = "SELECT " + str(args_list).replace('[', '').replace(']', '').replace("'", '') + " FROM " \
+              + self._tables[table] + " WHERE " + condition + ";"
 
         try:
+            print(sql)
             print("Querying record...", end='', flush=True)
             self._cursor.execute(sql)
             print("\rQuery record success.")
-            for r in self._cursor:
-                yield r
+            for row in self._cursor.fetchall():
+                yield row[0]
         except Exception as e:
             print("Select failed: ", str(e.args))
 
@@ -113,6 +120,7 @@ class Pysql:
 
     def update(self, table, **kwargs):
         """
+        pysql.update("images", is_deleted=0, file_name="b.jpg")
         :param table: 表名
         :param kwargs: 需更新的列名，条件(限一个)放最后
         :return:
@@ -147,6 +155,6 @@ def unquote_url():
 if __name__ == '__main__':
     # main函数为测试各方法所用
     # pysql = Pysql()
-    # pysql.update("images", is_deleted=0, file_name="b.jpg")
+    #
     # pysql.close()
     pass
