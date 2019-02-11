@@ -4,8 +4,8 @@ import random
 import os
 from PIL import Image
 
-read_dir = r"D:\Users\Teemo Nicolas\OneDrive - business\文档\JetBrains\PycharmProjects\wheat\data\recover\rust\\"
-save_dir = r"D:\Users\Teemo Nicolas\OneDrive - business\文档\JetBrains\PycharmProjects\wheat\data\train\rust\\"
+read_dir = r"D:\Users\Teemo Nicolas\OneDrive - business\文档\JetBrains\PycharmProjects\wheat\data\recover\blight\\"
+save_dir = r"D:\Users\Teemo Nicolas\OneDrive - business\文档\JetBrains\PycharmProjects\wheat\data\train\blight\\"
 read_count = 0
 save_count = 0
 error_count = 0
