@@ -17,7 +17,7 @@ from tensorflow.python.keras.optimizers import SGD
 WIDTH = 30
 HEIGHT = 30
 NUM_CLASS = 3
-data_dir = r'D:\Users\Teemo Nicolas\Documents\Progects\JetBrainsProjects\PycharmProjects\wheat\data\\'
+data_dir = '../data/'
 
 
 def load_data(dir, _label):
@@ -37,9 +37,9 @@ def load_data(dir, _label):
 
 def load_train_data(dir):
     # 加载数据
-    x_train0, y_train0, num = load_data(data_dir + dir + '\\blight', 0)
-    x_train1, y_train1, num1 = load_data(data_dir + dir + '\\powdery', 1)
-    x_train2, y_train2, num2 = load_data(data_dir + dir + '\\rust', 2)
+    x_train0, y_train0, num = load_data(data_dir + dir + '/blight', 0)
+    x_train1, y_train1, num1 = load_data(data_dir + dir + '/powdery', 1)
+    x_train2, y_train2, num2 = load_data(data_dir + dir + '/rust', 2)
 
     total = num + num1 + num2
     x_train_local = np.empty((total, WIDTH, HEIGHT, 3), dtype="float32")
@@ -61,6 +61,8 @@ def load_train_data(dir):
 
 def main(times):
     x_train, y_train = load_train_data('train')
+    # (1738, 30, 30, 3) (1738,)
+    # <class 'numpy.ndarray'> <class 'numpy.ndarray'>
     x_test, y_test = load_train_data('test')
 
     y_train = tf.keras.utils.to_categorical(y_train, num_classes=NUM_CLASS)
@@ -106,7 +108,7 @@ def main(times):
 
     model.fit(x_train, y_train, batch_size=32, callbacks=cbks, epochs=times, validation_data=(x_test, y_test))
     score = model.evaluate(x_test, y_test, batch_size=32)
-    # print(score[0])
+    print(score[0])
 
 
 if __name__ == '__main__':

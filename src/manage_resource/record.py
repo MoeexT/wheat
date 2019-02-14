@@ -7,8 +7,11 @@ import os
 import tensorflow as tf
 from PIL import Image
 
-record_path = "../../record/wheat.tfrecords"
+record_path = "../../data/train/train.wheat.tfrecords"
 test_record_image_path = "../../testRecord/"
+
+WIDTH = 30
+HEIGHT = 30
 
 
 def write_record():
@@ -21,6 +24,7 @@ def write_record():
         for image_name in os.listdir(path + disease_name + '/'):
             full_name = path + disease_name + '/' + image_name
             image = Image.open(full_name).convert('RGB')
+            image = image.resize((WIDTH, HEIGHT))
             image_raw = image.tobytes()
             example = tf.train.Example(features=tf.train.Features(feature={
                 "label": tf.train.Feature(int64_list=tf.train.Int64List(value=[index])),
@@ -41,7 +45,7 @@ def read_and_decode(filename):  # 读入dog_train.tfrecords
                                        })  # 将image数据和label取出来
 
     img = tf.decode_raw(features['image_raw'], tf.uint8)
-    img = tf.reshape(img, [300, 300, 3])  # reshape为128*128的3通道图片
+    img = tf.reshape(img, [WIDTH, HEIGHT, 3])  # reshape为30*30的3通道图片
     img = tf.cast(img, tf.float32) * (1. / 255) - 0.5  # 在流中抛出img张量
     label = tf.cast(features['label'], tf.int32)  # 在流中抛出label张量
     print(img, label)
@@ -58,7 +62,7 @@ def read_and_show(filename):
                                            'image_raw': tf.FixedLenFeature([], tf.string),
                                        })  # 取出包含image和label的feature对象
     image = tf.decode_raw(features['image_raw'], tf.uint8)
-    image = tf.reshape(image, [300, 300, 3])
+    image = tf.reshape(image, [WIDTH, HEIGHT, 3])
     label = tf.cast(features['label'], tf.int32)
 
     with tf.Session() as sess:
@@ -66,11 +70,13 @@ def read_and_show(filename):
         sess.run(init_op)
         coord = tf.train.Coordinator()
         threads = tf.train.start_queue_runners(coord=coord)
-        for i in range(20):
+        for i in range(2):
             example, l = sess.run([image, label])  # 在会话中取出image和label
-            img = Image.fromarray(example, 'RGB')  # 这里Image是之前提到的
-            img.save(test_record_image_path + str(i) + '_''Label_' + str(l) + '.jpg')  # 保存图片
-            # print(example, l)
+            # (30, 30, 3) ()
+            # <class 'numpy.ndarray'> <class 'numpy.int32'>
+            # img = Image.fromarray(example, 'RGB')  # 这里Image是之前提到的
+            # img.save(test_record_image_path + str(i) + '_''Label_' + str(l) + '.jpg')  # 保存图片
+            # print(example.shape, l.shape)
         coord.request_stop()
         coord.join(threads)
 
