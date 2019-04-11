@@ -20,7 +20,7 @@ from tensorflow.python.keras.optimizers import SGD
 WIDTH = 30
 HEIGHT = 30
 NUM_CLASS = 3
-data_dir = r'D:\Sarmon\Documents\Codes\PycharmProjects\wheat\data\\'
+data_dir = '../data/'
 
 
 def load_data(dir, _label):
@@ -88,7 +88,7 @@ def main(times=100):
     y_test = tf.keras.utils.to_categorical(y_test, num_classes=NUM_CLASS)
 
     # callbacks start
-    tb_cb = keras.callbacks.TensorBoard(log_dir=r'..\log',
+    tb_cb = keras.callbacks.TensorBoard(log_dir='../logs',
                                         histogram_freq=1,
                                         write_graph=True,
                                         write_images=False)

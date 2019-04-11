@@ -1,0 +1,16 @@
+# config folder
+.idea/
+
+#python
+*.pyc
+
+# latex
+*.aux
+*.log
+*.toc
+*.gz
+
+# tensorflow
+
+*.MASTERHAMMER
+src/tf

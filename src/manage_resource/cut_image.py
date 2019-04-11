@@ -1,14 +1,22 @@
 # -*- coding: utf-8 -*-
 
+"""
+处理已手动挑选好的图片
+选取一定大小（300px*300px）保存为训练或测试集
+"""
+
 import random
 import os
 from PIL import Image
 
-read_dir = r"D:\Users\Teemo Nicolas\OneDrive - business\文档\JetBrains\PycharmProjects\wheat\data\recover\blight\\"
-save_dir = r"D:\Users\Teemo Nicolas\OneDrive - business\文档\JetBrains\PycharmProjects\wheat\data\train\blight\\"
+read_dir = r"C:\Users\Administrator\OneDrive - business\文档\JetBrains\PycharmProjects\wheat\data\test\blight\\"
+save_dir = r"C:\Users\Administrator\OneDrive - business\文档\JetBrains\PycharmProjects\wheat\data\test\cut-rust\\"
 read_count = 0
 save_count = 0
 error_count = 0
+
+W = 210  # 切割出来的宽高
+H = 210
 
 
 def cut(image):
@@ -16,11 +24,11 @@ def cut(image):
     img = Image.open(image).convert('RGB')
     width, height = img.size
     imgs = []
-    if width >= 300 and height >= 300:
+    if width >= W and height >= H:
         for i in range(3):
-            x = random.randint(0, width - 300)
-            y = random.randint(0, height - 300)
-            imgs.append(img.crop((x, y, x + 300, y + 300)))
+            x = random.randint(0, width - W)
+            y = random.randint(0, height - H)
+            imgs.append(img.crop((x, y, x + W, y + H)))
     else:
         print("SizeException: ", (width, height), "From: ", image)
         error_count += 1
@@ -49,5 +57,10 @@ def main():
     print("error: ", error_count)
 
 
+def reshape_all():
+    for file in os.listdir(read_dir):
+        img = Image.open(read_dir+file).convert('RGB').resize((300, 300)).save(read_dir+file, 'JPEG')
+
+
 if __name__ == '__main__':
-    main()
+    reshape_all()

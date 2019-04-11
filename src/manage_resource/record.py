@@ -1,21 +1,23 @@
-#! python3
+#! py -3
 # -*- coding: utf-8 -*- 
-
+#########################################
 # 借鉴于 https://blog.csdn.net/chaipp0607/article/details/72960028
+# 制作、测试tfRecord数据集
+#########################################
 
 import os
 import tensorflow as tf
 from PIL import Image
 
-record_path = "../../data/train/train.wheat.tfrecords"
-test_record_image_path = "../../testRecord/"
+record_path = "../../data/test.wheat.tfrecords"
+test_record_image_path = "../../data/show/"
 
 WIDTH = 30
 HEIGHT = 30
 
 
 def write_record():
-    path = "../../data/train/"
+    path = "../../data/test/"
     diseases = ['blight', 'powdery', 'rust']
 
     writer = tf.python_io.TFRecordWriter(record_path)
@@ -70,12 +72,12 @@ def read_and_show(filename):
         sess.run(init_op)
         coord = tf.train.Coordinator()
         threads = tf.train.start_queue_runners(coord=coord)
-        for i in range(2):
+        for i in range(20):
             example, l = sess.run([image, label])  # 在会话中取出image和label
             # (30, 30, 3) ()
             # <class 'numpy.ndarray'> <class 'numpy.int32'>
-            # img = Image.fromarray(example, 'RGB')  # 这里Image是之前提到的
-            # img.save(test_record_image_path + str(i) + '_''Label_' + str(l) + '.jpg')  # 保存图片
+            img = Image.fromarray(example, 'RGB')  # 这里Image是之前提到的
+            img.save(test_record_image_path + str(i) + '_''Label_' + str(l) + '.jpg')  # 保存图片
             # print(example.shape, l.shape)
         coord.request_stop()
         coord.join(threads)

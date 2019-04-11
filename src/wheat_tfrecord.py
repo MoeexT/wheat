@@ -1,4 +1,4 @@
-#! python3
+#! py -3
 # -*- coding: utf-8 -*- 
 
 import os
@@ -22,84 +22,8 @@ HEIGHT = 30
 BATCH_SIZE = 32
 NUM_CLASSES = 3
 
-train_data_path = "../data/train/train.wheat.tfrecords"
-test_data_path = "../data/test/test.wheat.tfrecords"
-
-
-def _parse_function(proto):
-    # define your tfrecord again. Remember that you saved your image as a string.
-    keys_to_features = {"label": tf.FixedLenFeature([], tf.int64),
-                        'image_raw': tf.FixedLenFeature([], tf.string)}
-
-    # Load one example
-    parsed_features = tf.parse_single_example(proto, keys_to_features)
-
-    # Turn your saved image string into an array
-    parsed_features['image_raw'] = tf.decode_raw(
-        parsed_features['image_raw'], tf.uint8)
-
-    return parsed_features['image_raw'], parsed_features["label"]
-
-
-def create_dataset(filepath):
-    # This works with arrays as well
-    dataset = tf.data.TFRecordDataset(filepath)
-
-    # Maps the parser on every filepath in the array. You can set the number of parallel loaders here
-    dataset = dataset.map(_parse_function, num_parallel_calls=8)
-
-    # This dataset will go on forever
-    dataset = dataset.repeat()
-
-    # Set the number of datapoints you want to load and shuffle
-    # dataset = dataset.shuffle(SHUFFLE_BUFFER)
-
-    # Set the batchsize
-    dataset = dataset.batch(BATCH_SIZE)
-
-    # Create an iterator
-    iterator = dataset.make_one_shot_iterator()
-
-    # Create your tf representation of the iterator
-    image, label = iterator.get_next()
-
-    # Bring your picture back in shape
-    image = tf.reshape(image, [-1, 30, 30, 3])
-
-    # Create a one hot array for your labels
-    label = tf.one_hot(label, NUM_CLASSES)
-
-    return image, label
-
-
-def read_and_decode(filename, one_hot=True, n_class=None, is_train=None):
-    """
-    Return tensor to read from TFRecord
-    :param filename:
-    :param one_hot:
-    :param n_class:
-    :param is_train:
-    :return:
-    """
-    filename_queue = tf.train.string_input_producer([filename])
-    reader = tf.TFRecordReader()
-    _, serialized_example = reader.read(filename_queue)
-    features = tf.parse_single_example(serialized_example,
-                                       features={
-                                           'label': tf.FixedLenFeature([], tf.int64),
-                                           'image_raw': tf.FixedLenFeature([], tf.string)
-                                       })
-    # You can do more image distortion here for training data
-    image = tf.decode_raw(features['image_raw'], tf.uint8)
-    # image.set_shape([WIDTH*HEIGHT*3])
-    image = tf.reshape(image, [WIDTH, HEIGHT, 3])
-    image = tf.cast(image, tf.float32) * (1. / 255) - 0.5
-
-    label = tf.cast(features['label'], tf.int32)
-    if one_hot and n_class:
-        label = tf.one_hot(label, n_class)
-
-    return image, label
+train_data_path = "../data/train.wheat.tfrecords"
+test_data_path = "../data/test.wheat.tfrecords"
 
 
 def read_and_show(filename):
@@ -189,4 +113,4 @@ def main(times):
 
 
 if __name__ == '__main__':
-    main(10)
+    main(5)

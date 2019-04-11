@@ -1,0 +1,26 @@
+TensorFlow 2.0 Upgrade Script
+-----------------------------
+Converted 1 files
+Detected 0 issues that require attention
+--------------------------------------------------------------------------------
+================================================================================
+Detailed log follows:
+
+================================================================================
+--------------------------------------------------------------------------------
+Processing file 'wheat_tfrecord.py'
+ outputting to 'wheat_tfrecord_upgraded.py'
+--------------------------------------------------------------------------------
+
+32:21: INFO: Renamed 'tf.train.string_input_producer' to 'tf.compat.v1.train.string_input_producer'
+33:13: INFO: Renamed 'tf.TFRecordReader' to 'tf.compat.v1.TFRecordReader'
+35:15: INFO: Added keywords to args of function 'tf.parse_single_example'
+35:15: INFO: Renamed 'tf.parse_single_example' to 'tf.io.parse_single_example'
+37:52: INFO: Renamed 'tf.FixedLenFeature' to 'tf.io.FixedLenFeature'
+38:56: INFO: Renamed 'tf.FixedLenFeature' to 'tf.io.FixedLenFeature'
+40:12: INFO: Renamed 'tf.decode_raw' to 'tf.io.decode_raw'
+44:9: INFO: Renamed 'tf.Session' to 'tf.compat.v1.Session'
+45:18: INFO: Renamed 'tf.global_variables_initializer' to 'tf.compat.v1.global_variables_initializer'
+48:18: INFO: Renamed 'tf.train.start_queue_runners' to 'tf.compat.v1.train.start_queue_runners'
+--------------------------------------------------------------------------------
+
