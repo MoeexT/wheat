@@ -1,1 +1,1 @@
-NUM_CLASS
+, num_classes=NUM_CLASS

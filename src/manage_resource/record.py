@@ -9,8 +9,8 @@ import os
 import tensorflow as tf
 from PIL import Image
 
-record_path = "../../data/test.wheat.tfrecords"
-test_record_image_path = "../../data/show/"
+record_path = "data/test.wheat.tfrecords"
+test_record_image_path = "data/show/"
 
 WIDTH = 30
 HEIGHT = 30
@@ -72,7 +72,7 @@ def read_and_show(filename):
         sess.run(init_op)
         coord = tf.train.Coordinator()
         threads = tf.train.start_queue_runners(coord=coord)
-        for i in range(20):
+        for i in range(164):
             example, l = sess.run([image, label])  # 在会话中取出image和label
             # (30, 30, 3) ()
             # <class 'numpy.ndarray'> <class 'numpy.int32'>

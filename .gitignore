@@ -1,16 +1,22 @@
 # config folder
 .idea/
+!.vscode
 
 #python
 *.pyc
 
 # latex
 *.aux
+*.bbl
+*.blg
 *.log
 *.toc
 *.gz
 
 # tensorflow
 
-*.MASTERHAMMER
+checkpoints/
+data/backup
+logs/
+models/
 src/tf
