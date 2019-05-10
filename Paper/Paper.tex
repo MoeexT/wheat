@@ -1,13 +1,16 @@
 % \author wo
-\documentclass[12pt UTF8]{ctexart}
+\documentclass[12pt, UTF8, AutoFakeBold]{ctexart}
 \usepackage{xeCJK}
+\usepackage{times}
 \usepackage{pdfpages}
 \usepackage{geometry}
+\usepackage{enumerate}
 
-\geometry{a4paper, left=2.5cm, top=2.5cm, right=2cm, bottom=2cm}
+\geometry{a4paper, left=2.4cm, top=2.4cm, right=2.4cm, bottom=2.4cm}
 
 \setCJKmainfont{SimSun}
 \setmainfont{Times New Roman}
+
 
 \title{基于深度学习的小麦病害分类模型特征分析}
 \date{}
@@ -23,70 +26,40 @@
 
 \begin{document}
 
+% 定义字体
+\newcommand{\song}{\CJKfamily{song}}    % 宋体
+\newcommand{\fs}{\CJKfamily{fs}}        % 仿宋体
+\newcommand{\kai}{\CJKfamily{kai}}      % 楷体
+\newcommand{\hei}{\CJKfamily{hei}}      % 黑体
+\newcommand{\li}{\CJKfamily{li}}        % 隶书
+
+\newcommand{\yihao}{\fontsize{26pt}{36pt}\selectfont}         % 一号, 1.4 倍行距
+\newcommand{\erhao}{\fontsize{22pt}{28pt}\selectfont}         % 二号, 1.25倍行距
+\newcommand{\xiaoer}{\fontsize{18pt}{18pt}\selectfont}        % 小二, 单倍行距
+\newcommand{\sanhao}{\fontsize{16pt}{24pt}\selectfont}        % 三号, 1.5倍行距
+\newcommand{\xiaosan}{\fontsize{15pt}{22pt}\selectfont}       % 小三, 1.5倍行距
+\newcommand{\sihao}{\fontsize{14pt}{21pt}\selectfont}         % 四号, 1.5 倍行距
+\newcommand{\banxiaosi}{\fontsize{13pt}{19.5pt}\selectfont}   % 半小四, 1.5倍行距
+\newcommand{\xiaosi}{\fontsize{12pt}{18pt}\selectfont}        % 小四, 1.5倍行距
+\newcommand{\dawu}{\fontsize{11pt}{11pt}\selectfont}       % 大五号, 单倍行距
+\newcommand{\wuhao}{\fontsize{10.5pt}{15.75pt}\selectfont}    % 五号, 单倍行距
+
 % \include{cover/cover.tex}
   \includepdf{cover/cover.pdf}
 
   \maketitle
-  \begin{abstract}
-    为了实时监控小麦病害情况并及时采取防治措施，找出一种适合分类处理小麦常见病害的神经网络模型。
-    本文首先以小麦病害图片资料为基础，经过挑选、裁剪后对图像进行序列化操作形成数据集，
-    然后通过构建的多个深度神经网络模型进行学习，并利用随机梯度下降法进行学习过程控制。
-    然后在此基础上改进表现较差的神经网络模型，在两个维度上形成对比，以此寻找最适合处理
-    小麦病害分类问题的深度神经网络模型。实验结果表明，在参与实验的多个神经网络结构中，
-    以卷积神经网络（convolutional neural networks，CNN）表现最为出众，
-    整体识别准确率达99\%，（交叉）验证准确率在（validation accuracy）75\%左右。
-    这表明卷积神经网络在小麦常见病害的识别中是有效且可行的，为小麦病害实时分析提供了有效分析手段。
-    
-    \leftline{\textbf{关键字 } \@ 小麦病害；卷积神经网络；卷积深度置信网络}
-  \end{abstract}
-  \newpage
-
-  \begin{center}
-    \fontsize{18pt}{18pt}\textbf{Feature analysis of wheat disease classification model based on deep learning} 
-  \end{center}
-  \begin{enabstract}
-    This is the abstract in English.    This is the abstract in English.    This is the abstract in English.    This is the abstract in English.    This is the abstract in English.  
-
-    \leftline{\textbf{Keywords } \@ Wheat disease; Convolutional Neural Network; Convolutional deep belief networks}
-  \end{enabstract}
-  \newpage
-  
-  
+  \input{content/Abstract.tex}
 
   \tableofcontents % 目录
   \newpage
 
-  \section{\textbf{前言}}
-  \subsection{\textbf{研究背景及意义}}
-  小麦是我国主要的粮食作物之一，主要分布在长江以北的大部分地区，种植面积位居第二，仅次于水稻。
-  病虫害是影响小麦等农作物产量和质量的重要问题。全世界范围内小麦病害有200多种，每年造成的产量
-  损失约为10\%\textasciitilde20\%。在我国危害较严重的有三十多种，其中以白粉病（Wheat powdery mildew）、
-  锈病（Puccinia striiformis West，包括条锈、杆锈、叶锈）、叶枯病（Wheat leaf blotch）、
-  赤霉病等在我国主要小麦产地分布较广，为害较为严重\cite{CGRIS}。
-
-  传统形式的小麦病虫害是依靠经验识别、人工喷施农药进行防治的。在大面积的小麦种植模式下，这种方
-  式不仅需要大量的人力物力，而且在喷施农药的过程中极为不安全。更进一步地讲，即使是在技术人员的
-  帮助下进行病害防治，也不能做到实时监控小麦病害情况、及时实施防治工作。因此如何做到实时监控并
-  报告小麦病害情况成为了现代农业生产中的重要目标。
-
-  自1980年机器学习被称为一个独立的方向开始，经过一代又一代人的努力，诞生出了大量经典的分类算法。
-  其中以朴素贝叶斯（Naive Bayes, NB）、Logistic回归（Logistic Regression, LR）、决策树
-  （Decision Tree, DT）、支持向量机（Support Vector Machine, SVM）等浅层机器学习模型最常用，
-  它们的出现为小麦病害的自动识别提供了有力的理论支持。但是这些经典分类算法的图像特征提取策略是基
-  于先验知识制定的，效率不高且不适合应用在大规模特征提取方面\cite{article1}。 近年来，由AlphaGo
-  带来的人工智能热潮使得深度学习一词出现在公共视野里。 深度学习是机器学习的分支，是一种以人工神经
-  网络为架构，对数据进行表征学习的算法。它使用了多层次的非线性信息处理和抽象，用于有监督或无监督的
-  特征学习、表示、分类和模式识别。
-
-  如此一来，将现代的深度学习技术与传统图像处理相结合的方式成为了农作物病害识别的新手段。深度学习在
-  图像处理领域的优势不仅仅在于能够准确地提取特征，还在于它通过处理大量图像数据时能不断地自我学习并
-  取得更高的准确率。
-
-  在以深度学习为主要手段的图像处理过程中，卷积神经网络模型对图像的处理由很高的优势，但本文研究的内
-  容不仅局限于卷积神经网络，还会就不同的深度置信网络模型与不同的卷积神经网络模型相比较，找出最适合
-  小麦病害识别的深度网络模型。
-
+  \section{\hei\xiaoer\textbf{前言}}
+  \input{content/ResearchBackground.tex} 
   \input{content/ResearchStatus.tex}
+  \newpage
+
+  \section{\hei\xiaoer\textbf{卷积神经网络}}
+  \input{content/CNN.tex}
 
   \newpage
   \bibliographystyle{unsrt}
