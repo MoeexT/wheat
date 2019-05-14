@@ -1,12 +1,39 @@
 % \author wo
-\documentclass[12pt, UTF8, AutoFakeBold]{ctexart}
+\documentclass[12pt, UTF8, AutoFakeBold, openany]{ctexart}
 \usepackage{xeCJK}
+\usepackage{amsfonts}  % \mathbb 黑版粗体支持
+\usepackage{amsmath}
+% \numberwithin{equation}{section} % 公式与章节关联
+\usepackage{newtxtt, newtxmath}
 \usepackage{times}
 \usepackage{pdfpages}
-\usepackage{geometry}
+\usepackage{geometry}  % 页面尺寸
 \usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{subfigure} % 插入多图片
+\usepackage{fancyhdr} % 页眉页脚
+%------- 页眉页脚样式 -------%
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{\song\xiaowu{东北林业大学本科毕业论文}}
+% \fancyhead[CO]{\thechapter}
+\fancyfoot[C]{\xiaowu{-\thepage-}}
+\renewcommand{\headrulewidth}{0.4pt}
+%------- 双线页眉的设置 -------%
+\makeatletter %双线页眉
+\def\headrule{{\if@fancyplain\let\headrulewidth\plainheadrulewidth\fi%
+\hrule\@height 1.0pt \@width\columnwidth\vskip1pt%上面线为1pt粗
+\hrule\@height 0.5pt\@width\columnwidth  %下面0.5pt粗
+\vskip-2\headrulewidth\vskip-1pt}      %两条线的距离1pt
+  \vspace{6mm}}     %双线与下面正文之间的垂直间距
+\makeatother
 
-\geometry{a4paper, left=2.4cm, top=2.4cm, right=2.4cm, bottom=2.4cm}
+% 更改插图标题格式
+% \renewcommand {\thetable} {\thechapter{}-\arabic{table}} 
+% \renewcommand {\thefigure} {\thechapter{}-\arabic{figure}}
+% \captionsetup{labelformat=default,labelsep=space} %去除冒号
+
+\geometry{a4paper, left=2.4cm, top=2.4cm, right=2.4cm, bottom=2.4cm}  % 页边距
 
 \setCJKmainfont{SimSun}
 \setmainfont{Times New Roman}
@@ -43,6 +70,7 @@
 \newcommand{\xiaosi}{\fontsize{12pt}{18pt}\selectfont}        % 小四, 1.5倍行距
 \newcommand{\dawu}{\fontsize{11pt}{11pt}\selectfont}       % 大五号, 单倍行距
 \newcommand{\wuhao}{\fontsize{10.5pt}{15.75pt}\selectfont}    % 五号, 单倍行距
+\newcommand{\xiaowu}{\fontsize{9pt}{9pt}\selectfont}    % 小五, 单倍行距
 
 % \include{cover/cover.tex}
   \includepdf{cover/cover.pdf}
