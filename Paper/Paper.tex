@@ -1,16 +1,19 @@
-% \author wo
-\documentclass[12pt, UTF8, AutoFakeBold, openany]{ctexart}
+\documentclass[12pt, UTF8, AutoFakeBold]{ctexart}  % , openany
 \usepackage{xeCJK}
 \usepackage{amsfonts}  % \mathbb 黑版粗体支持
 \usepackage{amsmath}
 % \numberwithin{equation}{section} % 公式与章节关联
+\renewcommand\theequation{\arabic{section}-\arabic{equation}} % 公式引用输出样式
+\usepackage{listings}  % 代码块
 \usepackage{newtxtt, newtxmath}
 \usepackage{times}
 \usepackage{pdfpages}
 \usepackage{geometry}  % 页面尺寸
 \usepackage{enumerate}
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage{subfigure} % 插入多图片
+\usepackage{caption}
 \usepackage{fancyhdr} % 页眉页脚
 %------- 页眉页脚样式 -------%
 \pagestyle{fancy}
@@ -29,14 +32,33 @@
 \makeatother
 
 % 更改插图标题格式
-% \renewcommand {\thetable} {\thechapter{}-\arabic{table}} 
-% \renewcommand {\thefigure} {\thechapter{}-\arabic{figure}}
-% \captionsetup{labelformat=default,labelsep=space} %去除冒号
+\renewcommand {\thetable} {\thesection{}-\arabic{table}} 
+\renewcommand {\thefigure} {\thesection{}-\arabic{figure}}
+\captionsetup{labelformat=default,labelsep=space} %去除冒号
 
 \geometry{a4paper, left=2.4cm, top=2.4cm, right=2.4cm, bottom=2.4cm}  % 页边距
 
 \setCJKmainfont{SimSun}
 \setmainfont{Times New Roman}
+
+% 代码块设置
+\lstset{
+  basicstyle=\xiaowu\fontspec{Consolas}, 
+  columns=fixed,       
+  % numbers=left,                                        % 在左侧显示行号
+  % numberstyle=\tiny\color{gray},                       % 设定行号格式
+  frame=none,                                          % 不显示背景边框
+  backgroundcolor=\color[RGB]{245,245,244},            % 设定背景颜色
+  keywordstyle={                                       % 设定关键字颜色
+    \color[RGB]{40,40,255}
+    \fontspec{Consolas}
+  },               
+  numberstyle=\footnotesize\color{darkgray},           
+  commentstyle=\it\color[RGB]{0,96,96},                % 设置代码注释的格式
+  stringstyle=\rmfamily\slshape\color[RGB]{128,0,0},   % 设置字符串格式
+  showstringspaces=false,                              % 不显示字符串中的空格
+  language=python,                                     % 设置语言
+}
 
 
 \title{基于深度学习的小麦病害分类模型特征分析}
@@ -71,6 +93,8 @@
 \newcommand{\dawu}{\fontsize{11pt}{11pt}\selectfont}       % 大五号, 单倍行距
 \newcommand{\wuhao}{\fontsize{10.5pt}{15.75pt}\selectfont}    % 五号, 单倍行距
 \newcommand{\xiaowu}{\fontsize{9pt}{9pt}\selectfont}    % 小五, 单倍行距
+\newcommand{\zerospace}{\hspace{0pt}}
+\newcommand{\onespace}{\hspace{1pt}}
 
 % \include{cover/cover.tex}
   \includepdf{cover/cover.pdf}
@@ -84,14 +108,22 @@
   \section{\hei\xiaoer\textbf{前言}}
   \input{content/ResearchBackground.tex} 
   \input{content/ResearchStatus.tex}
+  \input{content/ResearchContent.tex}
   \newpage
 
-  \section{\hei\xiaoer\textbf{卷积神经网络}}
+  \section{\hei\xiaoer\textbf{卷积网络}}
   \input{content/CNN.tex}
-
   \newpage
+
+  \section{\hei\xiaoer\textbf{基于卷积网络的小麦病害图像识别}}
+  \input{content/ExperimentalProcedure.tex}
+  \newpage
+  
+  \section{\hei\xiaoer\textbf{实验结果分析}}
+  \input{content/ExperimentAnalysis.tex}
+  \newpage
+
   \bibliographystyle{unsrt}
   \bibliography{references}
 
 \end{document}
-          

@@ -5,11 +5,17 @@ import time
 import numpy as np
 from PIL import Image
 
-WIDTH = 30
-HEIGHT = 30
+WIDTH = 100
+HEIGHT = 100
 NUM_CLASS = 3
 data_dir = 'data/'
 
+"""
+        train   test    evl
+blight  278     94      94
+powdery 337     111     111
+rust    525     174     174
+"""
 
 def load_single_data(dir, _label):
     imgs = os.listdir(dir)
@@ -52,10 +58,13 @@ def load_all_data(dir):
 def save_data():
     x_train, y_train = load_all_data('train')
     x_test, y_test = load_all_data('test')
+    x_evl, y_evl = load_all_data('evl')
     np.save('data/wheat/wheat.train.data.npy', x_train)
     np.save('data/wheat/wheat.train.label.npy', y_train)
     np.save('data/wheat/wheat.test.data.npy', x_test)
     np.save('data/wheat/wheat.test.label.npy', y_test)
+    np.save('data/wheat/wheat.evl.data.npy', x_evl)
+    np.save('data/wheat/wheat.evl.label.npy', y_evl)
 
 def load_data():
     train_data = np.load('data/wheat/wheat.train.data.npy')
@@ -66,7 +75,11 @@ def load_data():
     # print(test_data.shape) -> (163, 30, 30, 3)
     test_label = np.load('data/wheat/wheat.test.label.npy')
     # print(test_label.shape) -> (163,)
-    return (train_data, train_label), (test_data, test_label)
+    evl_data = np.load('data/wheat/wheat.evl.data.npy')
+    # print(test_data.shape) -> (163, 30, 30, 3)
+    evl_label = np.load('data/wheat/wheat.evl.label.npy')
+    # print(test_label.shape) -> (163,)
+    return (train_data, train_label), (test_data, test_label), (evl_data, evl_label)
 
 if __name__=='__main__':
     save_data()
