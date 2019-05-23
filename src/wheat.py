@@ -3,6 +3,7 @@
 
 import os
 import time
+from datetime import datetime as dt
 import numpy as np
 
 import tensorflow as tf
@@ -27,20 +28,20 @@ def create_model():
     model = Sequential()
     # 输入: 3 通道 100x100 像素图像 -> (100, 100, 3) 张量。
     # 使用 32 个大小为 3x3 的卷积滤波器。
-    model.add(Conv2D(32, (3, 3), activation='relu', input_shape=(WIDTH, HEIGHT, 3)))
-    model.add(Conv2D(32, (3, 3), activation='relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.25))
+    model.add(Conv2D(32, (3, 3), activation='relu', input_shape=(WIDTH, HEIGHT, 3), name="conv2d"))
+    model.add(Conv2D(32, (3, 3), activation='relu', name="conv2d_1"))
+    model.add(MaxPooling2D(pool_size=(2, 2), name="max_pooling2d"))
+    model.add(Dropout(0.25, name="dropout"))
 
-    model.add(Conv2D(64, (3, 3), activation='relu'))
-    model.add(Conv2D(64, (3, 3), activation='relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.25))
+    model.add(Conv2D(64, (3, 3), activation='relu', name="conv2d_2"))
+    model.add(Conv2D(64, (3, 3), activation='relu', name="conv2d_3"))
+    model.add(MaxPooling2D(pool_size=(2, 2), name="max_pooling2d_1"))
+    model.add(Dropout(0.25, name="dropout_1"))
 
-    model.add(Flatten())
-    model.add(Dense(256, activation='relu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(NUM_CLASS, activation='softmax'))
+    model.add(Flatten(name="flatten"))
+    model.add(Dense(256, activation='relu', name="dense"))
+    model.add(Dropout(0.5, name="dropout_2"))
+    model.add(Dense(NUM_CLASS, activation='softmax', name="dense_1"))
 
     sgd = SGD(lr=0.0001, decay=1e-6, momentum=0.01, nesterov=True)
     model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
@@ -49,17 +50,22 @@ def create_model():
 
 
 def main(times):
-    (x_train, y_train), (x_test, y_test), (x_evl, y_evl) = load_data()
+    (x_train, y_train), (x_test, y_test), (x_valid, y_valid) = load_data()
 
     y_train = tf.keras.utils.to_categorical(y_train, num_classes=NUM_CLASS)
     y_test = tf.keras.utils.to_categorical(y_test, num_classes=NUM_CLASS)
-    y_evl = tf.keras.utils.to_categorical(y_evl, num_classes=NUM_CLASS)
+    y_valid = tf.keras.utils.to_categorical(y_valid, num_classes=NUM_CLASS)
 
     # callbacks start
-    tb_cb = keras.callbacks.TensorBoard(log_dir=r'..\logs',
+    tb_cb = keras.callbacks.TensorBoard(log_dir=r'logs',
                                         histogram_freq=1,
-                                        write_graph=True,
-                                        write_images=False)
+                                        write_images=True,
+                                        )
+                                        # embeddings_freq=1,
+                                        
+                                        # embeddings_data=x_train
+                                        # write_graph=True,
+                                        # write_grads=True,embeddings_layer_names=None
     '''
     es_cb = keras.callbacks.EarlyStopping(monitor='val_loss',
                                           min_delta=0.09,
@@ -69,16 +75,16 @@ def main(times):
     cbks = [tb_cb]
     # callbacks end 
     model = create_model()
-    model.fit(x_train, y_train, batch_size=32, callbacks=cbks, epochs=times, validation_data=(x_test, y_test))
-    # model.save("../models/wheat.models.h5")
+    model.fit(x_train, y_train, batch_size=32, callbacks=cbks, epochs=times, validation_data=(x_valid, y_valid))
+    # model.save("../models/wheat.models_" + dt.now().strftime("%Y-%m-%d_%H:%M:%S") + ".h5")
     # print("Saved models: wheat.models.h5")
-    loss, acc = model.evaluate(x_evl, y_evl, batch_size=32)
+    loss, acc = model.evaluate(x_test, y_test, batch_size=32)
     print("Restored models, accuracy: {:5.2f}%".format(100*acc))
 
 
 if __name__ == '__main__':
     start = time.clock()
-    main(1000)
+    main(10)
     end = time.clock()
     print("运行时间：", end - start)
     # plot_model(create_model(), to_file="paper/resource/NewbNet.jpg", show_shapes=True)
