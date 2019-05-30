@@ -13,20 +13,32 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{subfigure} % 插入多图片
+\usepackage{epstopdf}
+\usepackage[multidot]{grffile} % 文件有两个点，因此LaTeX将其视为.fig4.eps- 这是一种未知的图形文件类型。
+\usepackage{color}
 \usepackage{caption}
 \usepackage{fancyhdr} % 页眉页脚
 %------- 页眉页脚样式 -------%
+% 设置页芯
+\setlength{\textwidth}{16.2cm}
+% \setlength{\textheight}{18.6cm}
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[C]{\song\xiaowu{东北林业大学本科毕业论文}}
+% \lhead{}
+% \chead{\song\xiaowu{东北林业大学本科毕业论文}}
+% \rhead{}
+% \lfoot{}
+% \cfoot{\xiaowu{-\thepage-}}
+% \rfoot{}
 % \fancyhead[CO]{\thechapter}
 \fancyfoot[C]{\xiaowu{-\thepage-}}
 \renewcommand{\headrulewidth}{0.4pt}
 %------- 双线页眉的设置 -------%
 \makeatletter %双线页眉
 \def\headrule{{\if@fancyplain\let\headrulewidth\plainheadrulewidth\fi%
-\hrule\@height 1.0pt \@width\columnwidth\vskip1pt%上面线为1pt粗
-\hrule\@height 0.5pt\@width\columnwidth  %下面0.5pt粗
+\hrule\@height 1.0pt \@width\textwidth\vskip1pt%上面线为1pt粗
+\hrule\@height 0.5pt\@width\textwidth  %下面0.5pt粗
 \vskip-2\headrulewidth\vskip-1pt}      %两条线的距离1pt
   \vspace{6mm}}     %双线与下面正文之间的垂直间距
 \makeatother
@@ -38,6 +50,10 @@
 
 \geometry{a4paper, left=2.4cm, top=2.4cm, right=2.4cm, bottom=2.4cm}  % 页边距
 
+% 参考文献上标
+\newcommand{\upcite}[1]{\textsuperscript{\textsuperscript{\cite{#1}}}}
+
+% 全局字体
 \setCJKmainfont{SimSun}
 \setmainfont{Times New Roman}
 
@@ -63,7 +79,7 @@
 
 \title{基于深度学习的小麦病害分类模型特征分析}
 \date{}
-\author{马群}
+\author{}
 % \date{2019年2月22日}
 
 % 英文摘要
@@ -75,54 +91,62 @@
 
 \begin{document}
 
-% 定义字体
-\newcommand{\song}{\CJKfamily{song}}    % 宋体
-\newcommand{\fs}{\CJKfamily{fs}}        % 仿宋体
-\newcommand{\kai}{\CJKfamily{kai}}      % 楷体
-\newcommand{\hei}{\CJKfamily{hei}}      % 黑体
-\newcommand{\li}{\CJKfamily{li}}        % 隶书
+  \includepdf[pages=-]{cover/cover.pdf}
 
-\newcommand{\yihao}{\fontsize{26pt}{36pt}\selectfont}         % 一号, 1.4 倍行距
-\newcommand{\erhao}{\fontsize{22pt}{28pt}\selectfont}         % 二号, 1.25倍行距
-\newcommand{\xiaoer}{\fontsize{18pt}{18pt}\selectfont}        % 小二, 单倍行距
-\newcommand{\sanhao}{\fontsize{16pt}{24pt}\selectfont}        % 三号, 1.5倍行距
-\newcommand{\xiaosan}{\fontsize{15pt}{22pt}\selectfont}       % 小三, 1.5倍行距
-\newcommand{\sihao}{\fontsize{14pt}{21pt}\selectfont}         % 四号, 1.5 倍行距
-\newcommand{\banxiaosi}{\fontsize{13pt}{19.5pt}\selectfont}   % 半小四, 1.5倍行距
-\newcommand{\xiaosi}{\fontsize{12pt}{18pt}\selectfont}        % 小四, 1.5倍行距
-\newcommand{\dawu}{\fontsize{11pt}{11pt}\selectfont}       % 大五号, 单倍行距
-\newcommand{\wuhao}{\fontsize{10.5pt}{15.75pt}\selectfont}    % 五号, 单倍行距
-\newcommand{\xiaowu}{\fontsize{9pt}{9pt}\selectfont}    % 小五, 单倍行距
-\newcommand{\zs}{\hspace{0pt}}
+  % 定义字体
+  \newcommand{\song}{\CJKfamily{song}}    % 宋体
+  \newcommand{\fs}{\CJKfamily{fs}}        % 仿宋体
+  \newcommand{\kai}{\CJKfamily{kai}}      % 楷体
+  \newcommand{\hei}{\CJKfamily{hei}}      % 黑体
+  \newcommand{\li}{\CJKfamily{li}}        % 隶书
+  \newcommand{\yihao}{\fontsize{26pt}{36pt}\selectfont}         % 一号, 1.4 倍行距
+  \newcommand{\erhao}{\fontsize{22pt}{28pt}\selectfont}         % 二号, 1.25倍行距
+  \newcommand{\xiaoer}{\fontsize{18pt}{18pt}\selectfont}        % 小二, 单倍行距
+  \newcommand{\sanhao}{\fontsize{16pt}{24pt}\selectfont}        % 三号, 1.5倍行距
+  \newcommand{\xiaosan}{\fontsize{15pt}{22pt}\selectfont}       % 小三, 1.5倍行距
+  \newcommand{\sihao}{\fontsize{14pt}{21pt}\selectfont}         % 四号, 1.5 倍行距
+  \newcommand{\banxiaosi}{\fontsize{13pt}{19.5pt}\selectfont}   % 半小四, 1.5倍行距
+  \newcommand{\xiaosi}{\fontsize{12pt}{18pt}\selectfont}        % 小四, 1.5倍行距
+  \newcommand{\dawu}{\fontsize{11pt}{11pt}\selectfont}       % 大五号, 单倍行距
+  \newcommand{\wuhao}{\fontsize{10.5pt}{15.75pt}\selectfont}    % 五号, 单倍行距
+  \newcommand{\xiaowu}{\fontsize{9pt}{9pt}\selectfont}    % 小五, 单倍行距
+  % \newcommand{\zs}{\hspace{0pt}}
+  \newcommand{\zs}{\hspace{-1pt}{\color{white}.}\hspace{-1.8pt}}
 
-% \include{cover/cover.tex}
-  \includepdf{cover/cover.pdf}
+  % \maketitle
+  % \input{content/Abstract.tex}
 
-  \maketitle
-  \input{content/Abstract.tex}
-
-  \tableofcontents % 目录
-  \newpage
+  % \tableofcontents % 目录
+  % \newpage
 
   \section{\hei\xiaoer\textbf{前言}}
   \input{content/ResearchBackground.tex} 
   \input{content/ResearchStatus.tex}
-  \input{content/ResearchContent.tex}
   \newpage
 
   \section{\hei\xiaoer\textbf{卷积网络}}
   \input{content/CNN.tex}
   \newpage
 
-  \section{\hei\xiaoer\textbf{基于卷积网络的小麦病害图像识别}}
+  \section{\hei\xiaoer\textbf{基于卷积网络的小麦病害图像分类}}
   \input{content/ExperimentalProcedure.tex}
   \newpage
   
-  \section{\hei\xiaoer\textbf{实验结果分析}}
+  \section{\hei\xiaoer\textbf{实验结果与分析}}
   \input{content/ExperimentAnalysis.tex}
+  \newpage
+  \section*{\hei\xiaoer\textbf{结论}}
+  \input{content/Conclusion.tex}
   \newpage
 
   \bibliographystyle{unsrt}
   \bibliography{references}
 
+  \includepdf[pages=-]{cover/reference.pdf}
+
+  % \clearpage
+  % \setcounter{page}{16}
+  % \section*{\hei\xiaoer\textbf{致谢}}
+  % \input{content/Thanks.tex}
+  % [1]	马群. 如何找到一篇合适的《东北林业大学本科生毕业论文LaTeX模板》Holy Fuck.
 \end{document}

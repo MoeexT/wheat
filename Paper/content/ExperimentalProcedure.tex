@@ -5,10 +5,22 @@
 \subsection{\hei\xiaosan\textbf{本文卷积网络结构}}
   \begin{figure}[H]
     \centering
-    \includegraphics[width=.4\textwidth]{resource/NewbNet.png}
+    \includegraphics[width=.5\textwidth]{resource/NewbNet.png}
     \caption{本文网络结构}
     \label{Figure.Third.1}
   \end{figure}
+
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=.5\textwidth]{resource/graph.png}
+    \caption{本文网络结构}
+    \label{Figure.Third.2}
+  \end{figure}
+
+
+  本文卷积网络模型中每一层的输入输出由图\ref{Figure.Third.1}所示，相对应网络层的操作由
+  图\ref{Figure.Third.2}所示。
+
   第一层和第二层为卷积层，它们的过滤器大小均为$3\times3$，深度为32，不使用全零填充，步长为1。
   第一层接受的输入层大小为$100\times100\times3$，所以输出的尺寸为$100+3-1=98$，深度为6。
   这一层共有$3\times3\times1\times32+32=320$个参数，其中32个为偏置。下一层节点矩阵有
@@ -18,7 +30,7 @@
   第三层为最大池化层，是一个$96\times96\times32$的节点矩阵。在本层中使用的过滤器大小为$2\times2$，步长为2.
   所以本层的输出大小为$48\times48\times16$。
 
-  第四层为Dropout层，Dropout层是Hinton\cite{hinton2012improving}为了防止过拟合、提高
+  第四层为Dropout层，该层是Hinton\upcite{hinton2012improving}为了防止过拟合、提高
   神经网络的性能而提出的。该层会随机丢弃一些神经元，dropout rate为0.25。
 
   第五至八层结构与前四层相似，不过为了提取更深的特征，将深度增加为64层。
@@ -26,14 +38,14 @@
   第九层Flatten操作将输入$22\times22\times64$的张量展平为1维$1\times30976$的张量，
   为下一层的全连接操作做准备。
 
-  第十层的全连接层（Dense）使用ReLU（RecitifiedLinearUnit,ReLU）作为激活函数。
-  ReLU即线性整流函数，指代数学中的斜坡函数：$f(x)=max(0,x)$。
+  第十层的全连接层（Dense）使用ReLU（RecitifiedLinearUnit，ReLU）作为激活函数。
+  ReLU即线性整流函数，指代数学中的斜坡函数：$f(x)=max(0,x)$\upcite{wiki:ReLU}。
   该层输入大小为$30976$，输出节点个数为256个，总共参数为$30976\times256+256=7930112$个。
 
   第十一层仍为Dropout层，随机丢弃率为0.5。
 
   第十二层为全连接层，该层使用Softmax函数作为激活函数，该函数能将一个含任意实数的K维向量$\mathbf{Z}$
-  “压缩”到另一个K维实向量$\sigma(\mathbf{Z})$中，并使得每一个元素的值域均在$(0,1)$之间，并且所有原色的和为1。
+  “压缩”到另一个K维实向量$\sigma(\mathbf{Z})$中，并使得每一个元素的值域均在$(0,1)$之间，并且所有原色的和为1\upcite{wiki:Softmax}。
   该函数的形式通常由下式给出：
   \[
     \sigma(\mathbf{Z})_j=\frac{e^{z_j}}{\sum^\mathbf{K}_{k=1} e^{z_k}} \quad for\ j=1, \dots,\mathbf{K}
@@ -46,98 +58,77 @@
 \subsection{\hei\xiaosan\textbf{LeNet-5和AlexNet结构简介}}
   \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth, natwidth=1612, natheight=482]{resource/2.4-网络结构.png}
+    \includegraphics[width=\textwidth, natwidth=1612, natheight=482]{resource/second/LeNet-5.png}
     \caption{LeNet-5网络结构}
-    \label{Figure.Third.2}
+    \label{Figure.Third.3}
   \end{figure}
-  第一层输入的是原始像素，LeNet-5模型接受的输入层大小为$32\times32\times1$。
-  第一个卷积层过滤器尺寸为$5\times5$，深度为6，不使用全零填充，步长为1，
-  输出尺寸为$32-5+1=28$，深度为6。这层共有$5\times5\times1\times6+6=156$个参数，其中6个为偏置。
+  LeNet-5模型接受的输入层大小为$32\times32\times1$。
+  第一个卷积层过滤器尺寸为$5\times5$，深度与输出深度通为6，步长为1，
+  输出尺寸为$32-5+1=28$。该层共有$5\times5\times1\times6+6=156$个参数，其中6个为偏置。
   下一层的节点矩阵有$28\times28\times6=4704$个节点，每个节点和$5\times5=25$给节点相连，所以本层共有
   $4704\times(25+1)=122304$个连接。
 
-  第二层池化层的输入是$28\times28\times6$的节点矩阵。该层的过滤器大小为$2\times2$，步长也为2。
-  所以本层输出大小为$14\times14\times6$。第三层是输入大小为$14\times14\times6$的卷积层，卷积核大小为
-  $2\times2$，步长为2。第四层是输入大小为$10\times10\times6$的卷积层，过滤器大小为$2\times2$，步长为2。
-  第五至七层均为全连接层，最后一层的输出为10个预测值。
+  % 第二层池化层的输入是$28\times28\times6$的节点矩阵，过滤器大小为$2\times2$，步长为2。
+  % 第三层是输入大小为$14\times14\times6$的卷积层，卷积核大小为
+  % $2\times2$，步长为2。第四层是输入大小为$10\times10\times6$的卷积层，过滤器大小为$2\times2$，步长为2。
+  第二至四层均为卷积核大小$2\times2$、步长为2的卷积层。第五至七层均为全连接层，最后一层的输出为10个预测值。
 
 
   \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{resource/AlexNet.png}
+    \includegraphics[width=\textwidth]{resource/second/AlexNet.png}
     \caption{AlexNet网络结构}
-    \label{Figure.Third.3}
+    \label{Figure.Third.4}
   \end{figure}
   AlexNet的输入图片大小为$224\times224\times3$，第一个卷积层使用96个较大的卷积核（$11\times11$）
   步长为4；接着是LRN层；在之后是一个过滤器为$3\times3$的最大池化层，步长为2。接下来的卷积层中使用
   的卷积核都是$3\times3$或$5\times5$的大小，并且步长均为1。最大池化层依然是$3\times3$，步长为2。
-  最后是三个相连的全连接层，最后输出1000个预测结果。
+  最后是三层均为全连接层，输出1000个预测结果。
 
 \subsection{\hei\xiaosan\textbf{实验步骤及操作}}
   \subsubsection{\hei\sihao\textbf{数据的获取及处理}}
+    
+
     实验所用的图片均来自网络。首先利用Python爬虫分别在百度图片和谷歌图片上爬取小麦的白粉病、
     叶枯病、锈病图片，保存至本地文件夹并做好备份。手工去除不清晰、含水印等劣质图片后，使用Python
     脚本将原始图片切割为多份$300px\times300px$的图片。然后将这些图片按3:1:1的比例随机分为train、
     test、evaluate三个数据集，使用Python将全部图片的尺寸缩小为$100px\times100px$后转为numpy数组，
     最后将这些数组序列化为$*.npy$文件，这样的做法
-    为重复实验省去了磁盘$IO$和图片处理操作的时间。数据集的样本和比例分布如图\ref{Figure.Third.4}所示：
-    \begin{figure}[H]
-      \centering
-      \includegraphics[width=.5\textwidth]{resource/数据分布.bmp}
-      \caption{实验数据分布}
-      \label{Figure.Third.4}
-    \end{figure}
+    为重复实验省去了磁盘$IO$和图片处理操作的时间。数据集的样本和比例分布如图\ref{Figure.Third.5}所示：
 
     \begin{figure}[htbp]
+      \centering
+      \includegraphics[width=.65\textwidth]{resource/second/data_ratio.bmp}
+      \caption{实验数据分布}
+      \label{Figure.Third.5}
+    \end{figure}
+
+    \begin{figure}[H]
       \centering %图片全局居中
       \subfigure[叶枯病]{
         \begin{minipage}[t]{.2\textwidth}
-          \includegraphics[width=\textwidth, natwidth=300, natheight=300]{resource/3.3叶枯病(1).jpg} \
-          \includegraphics[width=\textwidth, natwidth=300, natheight=300]{resource/3.3叶枯病(2).jpg} \
-          \includegraphics[width=\textwidth, natwidth=300, natheight=300]{resource/3.3叶枯病(3).jpg} \
+          \includegraphics[width=\textwidth]{resource/third/blight(1).jpg} \
+          \includegraphics[width=\textwidth]{resource/third/blight(2).jpg} \
+          \includegraphics[width=\textwidth]{resource/third/blight(3).jpg} 
         \end{minipage}
       }
       \subfigure[白粉病]{
         \begin{minipage}[t]{.2\textwidth}
-          \includegraphics[width=\textwidth, natwidth=300, natheight=300]{resource/3.3白粉病(1).jpg} \
-          \includegraphics[width=\textwidth, natwidth=300, natheight=300]{resource/3.3白粉病(2).jpg} \
-          \includegraphics[width=\textwidth, natwidth=300, natheight=300]{resource/3.3白粉病(3).jpg} \
+          \includegraphics[width=\textwidth]{resource/third/powdery(1).jpg} \
+          \includegraphics[width=\textwidth]{resource/third/powdery(2).jpg} \
+          \includegraphics[width=\textwidth]{resource/third/powdery(3).jpg} 
         \end{minipage}
       }
       \subfigure[锈病]{
         \begin{minipage}[t]{.2\textwidth}
-          \includegraphics[width=\textwidth, natwidth=300, natheight=300]{resource/3.3锈病(1).jpg} \
-          \includegraphics[width=\textwidth, natwidth=300, natheight=300]{resource/3.3锈病(2).jpg} \
-          \includegraphics[width=\textwidth, natwidth=300, natheight=300]{resource/3.3锈病(3).jpg} \
+          \includegraphics[width=\textwidth]{resource/third/rust(1).jpg} \
+          \includegraphics[width=\textwidth]{resource/third/rust(2).jpg} \
+          \includegraphics[width=\textwidth]{resource/third/rust(3).jpg} 
         \end{minipage}
       }
       \caption{数据样本}
-      \label{Figure.Third.5}
+      \label{Figure.Third.6}
     \end{figure}
-    % \begin{figure}
-    %   \centering
-    %   \subfigure[blight]{
-    %     \begin{minipage}[t]{.2\textwidth}
-    %       \includegraphics[width=\textwidth, natwidth=300, natheight=300]{resource/3.3叶枯病(1).jpg}
-    %       \includegraphics[width=\textwidth, natwidth=300, natheight=300]{resource/3.3叶枯病(2).jpg}
-    %       \includegraphics[width=\textwidth, natwidth=300, natheight=300]{resource/3.3叶枯病(3).jpg}
-    %     \end{minipage}
-    %   }
-    %   \subfigure[powdery]{
-    %     \begin{minipage}[t]{.2\textwidth}
-    %       \includegraphics[width=\textwidth, natwidth=300, natheight=300]{resource/3.3白粉病(1).jpg}
-    %       \includegraphics[width=\textwidth, natwidth=300, natheight=300]{resource/3.3白粉病(2).jpg}
-    %       \includegraphics[width=\textwidth, natwidth=300, natheight=300]{resource/3.3白粉病(3).jpg}
-    %     \end{minipage}
-    %   }
-    %   \subfigure[rust]{
-    %     \begin{minipage}[t]{.2\textwidth}
-    %       \includegraphics[width=\textwidth, natwidth=300, natheight=300]{resource/3.3锈病(1).jpg}
-    %       \includegraphics[width=\textwidth, natwidth=300, natheight=300]{resource/3.3锈病(2).jpg}
-    %       \includegraphics[width=\textwidth, natwidth=300, natheight=300]{resource/3.3锈病(3).jpg}
-    %     \end{minipage}
-    %   }
-    % \end{figure}
 
 
   \subsubsection{\hei\sihao\textbf{卷积网络模型的建立}}

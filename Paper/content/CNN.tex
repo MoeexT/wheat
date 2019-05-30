@@ -48,19 +48,19 @@
   过程中，学习算法会在核合适的位置自动更新为恰当的值，所以一个基于互相关学习算法所学习到的核，是使用卷
   积运算所学到的核的翻转。
 
-  数字图像是二维图像用有限数字数字像素的表示\cite{wiki:xxx}，对数字图像做卷积操作其实是在图像上滑动一个卷积核（即滤波器），
+  数字图像是二维图像用有限数字数字像素的表示\upcite{wiki:数字图像}，对数字图像做卷积操作其实是在图像上滑动一个卷积核（即滤波器），
   将图像点上的像素值与卷积核对应位置的值相乘，然后将相乘后所有的值相加，作为特征图像上对应位置的像素值。
-  图\ref{Figure.Second.1}展示了(\ref{Formula.Second.2})中反转前后的卷积核在小麦锈病图像中特征提取效果的对比图。
+  图\ref{Figure.Second.1}展示了式(\ref{Formula.Second.2})中反转前后的卷积核在小麦锈病图像中特征提取效果的对比图。
   \begin{figure}[H]
     \centering %图片全局居中
     \subfigure[原图]{
-      \includegraphics[width=0.2\textwidth]{resource/2-原图.jpg}
+      \includegraphics[width=.2\textwidth]{resource/second/rust.jpg}
     }
     \subfigure[互相关]{
-      \includegraphics[width=0.2\textwidth]{resource/2-互相关.jpg}
+      \includegraphics[width=.2\textwidth]{resource/second/nconv.jpg}
     }
     \subfigure[卷积]{
-      \includegraphics[width=0.2\textwidth]{resource/2-卷积.jpg}
+      \includegraphics[width=.2\textwidth]{resource/second/conv.jpg}
     }
     \caption{卷积核的翻转对特征提取的影响}
     \label{Figure.Second.1}
@@ -74,15 +74,15 @@
     
 
     1962年，Hubel和Wiesel通过对猫脑视觉皮层的研究，首次提出了一种新的概念——“感受野”
-    （Receptive Field），对后来人工智能网络的发展起了很大的推动作用\cite{hubel1962receptive}。
+    （Receptive Field），对后来人工智能网络的发展起了很大的推动作用\upcite{hubel1962receptive}。
     感受野是受生物学上感受野的机制而提出，在生物学上描述的是神经系统的一些神经元的特性。
     而在人工神经网络中，感受野指的是指的是卷积神经网络层输出的特征向量上的像素点对应的
     输入图像上的区域，通俗地讲，就是特征向量上的一个点对应的输入图像上的区域。1980年，Fukushima
-    \cite{fukushima1982neocognitron}基于生物神经学的感受野理论提出了神经认知机和权重
-    共享的卷积神经层，这被视为卷积神经网络的雏形。1989年，LeCun\cite{lecun1989backpropagation}
+    \upcite{fukushima1982neocognitron}基于生物神经学的感受野理论提出了神经认知机和权重
+    共享的卷积神经层，这被视为卷积神经网络的雏形。1989年，LeCun
     将反向传播算法与权值共享的卷积神经层相结合，发明了卷积神经网络，并首次将卷积神经网络成功
-    地应用到美国邮局的手写字符识别程序中。1998年，LeCun\cite{lecun1998gradient}提出了
-    卷积神经网络的经典网络模型LeNet-5，它是第一个成功应用于数字识别问题的卷积神经网络。
+    地应用到美国邮局的手写字符识别程序中\upcite{lecun1989backpropagation}。1998年，LeCun提出了
+    经典卷积神经网络模型LeNet-5，该模型是第一个成功应用于图像数字识别的卷积神经网络\upcite{lecun1998gradient}。
     
  
   \subsection{\hei\xiaosan\textbf{卷积网络的特点}}
@@ -101,7 +101,7 @@
     统计效率。稀疏交互的图形化表示如图\ref{Figure.Second.2}所示。
     \begin{figure}[htbp]
       \centering
-      \includegraphics[width=.4\textwidth, natwidth=624, natheight=577]{resource/2.3-sparse.png}
+      \includegraphics[width=.4\textwidth, natwidth=624, natheight=577]{resource/second/sparse.png}
       \caption{稀疏交互}
       \label{Figure.Second.2}
     \end{figure}
@@ -123,9 +123,9 @@
   \subsection{\hei\xiaosan\textbf{卷积网络的结构}}
     卷积网络一般由数个卷积层（Convolutional layer）、池化层（Pooling 
     layer）、全连接层及输出层交叉堆叠而成，卷积层和池化层一般会取多个，采用卷积层和
-    池化层交替堆叠的模式。卷积层并行地计算多个卷积产生一组线性激活响应，每一个线性激活响应
-    将会通过一个非线性的激活函数，例如整流线性激活函数。然后使用池化层来进一步调整这一层的输出。
-    最后添加0~2个全连接层。
+    池化层交替堆叠的模式。卷积层可以并行地计算多个卷积产生一组线性输出，每一个线性激活响应
+    将会通过一个非线性的激活函数，例如线性整流激活函数。然后使用池化层来进一步调整这一层的输出。
+    最后添加0~2个全连接层以输出最终结果。
     目前，整个网络结构趋向于使用更小的卷积核（比如11和33）以及更深的网络结构。
     此外，由于卷积的操作性越来越灵活，池化层的作用也变得越来越小，因此目前比较流行的卷积网络中
     池化层的比例也越来越低，趋向于全卷积网络。
