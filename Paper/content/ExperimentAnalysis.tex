@@ -96,7 +96,7 @@
     \end{figure}
 
 
-  \subsection{\hei\xiaosan\textbf{分布图与直方图}}
+  \subsection{\hei\xiaosan\textbf{参数分布图}}
     图\ref{Figure.Fourth.4}展示了LeNet-5训练600次和本文模型训练2000次的卷积层偏置变化分布图。
     从图中可以看出，前者的偏置变化出现放缓的迹象，这说明该模型的权重已经收敛，模型也越来越确定
     当前的偏置为最适合本模型的值。而对本文模型的偏置变化来看，它仍然需要更多的训练次数来得到
@@ -112,7 +112,7 @@
       \subfigure[本文模型]{
         \includegraphics[width=.45\textwidth]{resource/analysis/distributions_newbnet_conv2d_1_bias_0.jpg}
       }
-      \caption{分布图}
+      \caption{2D分布图}
       \label{Figure.Fourth.4}
     \end{figure}
     
@@ -131,7 +131,7 @@
       \subfigure[本文模型]{
         \includegraphics[width=.45\textwidth]{resource/analysis/histograms_newbnet_conv2d_1_bias_0.jpg}
       }
-      \caption{直方图}
+      \caption{3D分布图}
       \label{Figure.Fourth.5}
     \end{figure}
   
