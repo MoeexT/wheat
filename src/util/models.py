@@ -76,4 +76,4 @@ class Models:
 
 
 if __name__ == "__main__":
-    plot_model(Models.alex_net(), to_file="alexnet.jpg", show_shapes=True)
+    plot_model(Models.newb_net(), to_file="newbnet.jpg", show_shapes=True)

@@ -6,14 +6,14 @@
   \begin{figure}[H]
     \centering
     \includegraphics[width=.5\textwidth]{resource/NewbNet.png}
-    \caption{本文网络结构}
+    \caption{网络结构及输入输出}
     \label{Figure.Third.1}
   \end{figure}
 
   \begin{figure}[H]
     \centering
     \includegraphics[width=.5\textwidth]{resource/graph.png}
-    \caption{本文网络结构}
+    \caption{网络结构及数据流}
     \label{Figure.Third.2}
   \end{figure}
 
@@ -22,13 +22,13 @@
   图\ref{Figure.Third.2}所示。
 
   第一层和第二层为卷积层，它们的过滤器大小均为$3\times3$，深度为32，不使用全零填充，步长为1。
-  第一层接受的输入层大小为$100\times100\times3$，所以输出的尺寸为$100+3-1=98$，深度为6。
+  第一层接受的输入层大小为$100\times100\times3$，所以输出的尺寸为$100+3-1=98$，深度为32。
   这一层共有$3\times3\times1\times32+32=320$个参数，其中32个为偏置。下一层节点矩阵有
   $98\times98\times32=307328$个节点，每个节点和$3\times3=9$个当前层节点相连，所以本卷积层
   共有$307328\times(9+1)=3073280$个连接。同理，第二层中共有$96\times96\times32\times(3\times3+1)=2949120$个连接。
 
   第三层为最大池化层，是一个$96\times96\times32$的节点矩阵。在本层中使用的过滤器大小为$2\times2$，步长为2.
-  所以本层的输出大小为$48\times48\times16$。
+  所以本层的输出大小为$48\times48\times32$。
 
   第四层为Dropout层，该层是Hinton\upcite{hinton2012improving}为了防止过拟合、提高
   神经网络的性能而提出的。该层会随机丢弃一些神经元，dropout rate为0.25。

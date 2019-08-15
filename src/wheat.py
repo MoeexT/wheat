@@ -12,13 +12,13 @@ from util.cbks import TensorBoardImage, customModelCheckpoint
 from util.models import Models
 from util.wheat_data import load_data
 
-WIDTH = 100
-HEIGHT = 100
+WIDTH = 30
+HEIGHT = 30
 NUM_CLASS = 3
 data_dir = 'data/'
 checkpoint_path = 'checkpoints/'
 
-Ishape = (100, 100, 3)
+Ishape = (32, 32, 1)
 lr = 0.0001
 times = 2000
 model_name = 'le-net'
@@ -55,7 +55,7 @@ def main():
                                           verbose=0,
                                           mode='auto')
     ti_cb = TensorBoardImage('Image Test')
-    cbks = [tb_cb, cp_cb]  # , cp_cb
+    cbks = [tb_cb]  # , cp_cb
 
     model = Models.le_net(Ishape)
     model.fit(x_train, y_train, batch_size=32, callbacks=cbks, epochs=times, validation_data=(x_valid, y_valid))
